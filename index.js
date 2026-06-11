@@ -12,7 +12,7 @@ const income = document.getElementById('total-income');
 const expense = document.getElementById('total-expense');
 const submitBtn = form.querySelector('.btn');
 
-function updateChart(income, expense) {
+function updateChart(income, expense, balance) {
     const ctx = document.getElementById('expense-chart').getContext('2d');
 
     if (myChart) {
@@ -22,16 +22,17 @@ function updateChart(income, expense) {
     myChart = new Chart(ctx, {
         type: 'pie',
         data: {
-            labels: ['Income', 'Expenses'],
+            labels: ['Income', 'Expenses', 'Current Balance'],
             datasets: [{
-                data: [income, expense],
-                backgroundColor: ['#22c55e', '#ef4444'],
-                borderWidth: 1
+                data: [income, expense, balance],
+                backgroundColor: ['#10b981', '#ef4444', '#6366f1'],
+                borderWidth: 0
             }]
         },
         options: {
             responsive: true,
-            maintainAspectRatio: false
+            maintainAspectRatio: false,
+
         }
     });
 }
@@ -58,6 +59,7 @@ function updateDOM() {
         amountSpan.innerText = `${sign}$${Math.abs(transaction.amount).toFixed(2)}`;
 
         const btnContainer = document.createElement('div');
+        btnContainer.classList.add('action-btns');
 
         const editBtn = document.createElement('button');
         editBtn.classList.add('edit-btn');
@@ -97,7 +99,8 @@ function updateDOM() {
 
     localStorage.setItem('transactions', JSON.stringify(transactions));
 
-    updateChart(totalIncome, totalExpense);
+    // FIX: Yahan netBalance pass nahi ho raha tha, ab yeh totalIncome aur totalExpense ke saath chart me dikhega
+    updateChart(totalIncome, totalExpense, netBalance);
 }
 
 form.addEventListener('submit', function (e) {
